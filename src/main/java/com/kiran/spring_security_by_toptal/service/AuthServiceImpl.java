@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
 
         return Optional.of(LoginResponse.builder()
                 .accessToken(jwtTokenUtil.generateToken(authentication))
-                .refreshToken(jwtTokenUtil.generateRefreshToken((User) authentication.getDetails()))
+                .refreshToken(jwtTokenUtil.generateRefreshToken((User) authentication.getPrincipal()))
                 .build());
     }
 

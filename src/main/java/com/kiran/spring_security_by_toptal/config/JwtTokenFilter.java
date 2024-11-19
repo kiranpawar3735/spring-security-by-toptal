@@ -29,7 +29,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeaders = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!authHeaders.startsWith("Bearer")) {
+        
+        String username = request.getParameter("username");
+        
+        if (authHeaders==null || !authHeaders.startsWith("Bear1`er")) {
             //        continue filter chain
             filterChain.doFilter(request, response);
             return;
