@@ -1,13 +1,14 @@
 package com.kiran.spring_security_by_toptal.service;
 
-import com.kiran.spring_security_by_toptal.entity.User;
-import com.kiran.spring_security_by_toptal.repository.RefreshTokenRepository;
-import com.kiran.spring_security_by_toptal.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.kiran.spring_security_by_toptal.entity.User;
+import com.kiran.spring_security_by_toptal.repository.RefreshTokenRepository;
+import com.kiran.spring_security_by_toptal.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {

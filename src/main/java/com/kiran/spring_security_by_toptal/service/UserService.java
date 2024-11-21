@@ -1,10 +1,9 @@
 package com.kiran.spring_security_by_toptal.service;
 
-import com.kiran.spring_security_by_toptal.beans.SignUpRequest;
-import com.kiran.spring_security_by_toptal.entity.User;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.kiran.spring_security_by_toptal.entity.User;
 
 public interface UserService {
 

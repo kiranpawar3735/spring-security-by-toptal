@@ -1,11 +1,24 @@
 package com.kiran.spring_security_by_toptal.controller;
 
-import com.kiran.spring_security_by_toptal.beans.*;
-import com.kiran.spring_security_by_toptal.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kiran.spring_security_by_toptal.beans.EmailVerification;
+import com.kiran.spring_security_by_toptal.beans.LoginRequest;
+import com.kiran.spring_security_by_toptal.beans.LoginResponse;
+import com.kiran.spring_security_by_toptal.beans.PasswordResetRequest;
+import com.kiran.spring_security_by_toptal.beans.PasswordResetResponse;
+import com.kiran.spring_security_by_toptal.beans.RefreshTokenRequest;
+import com.kiran.spring_security_by_toptal.beans.SignUpRequest;
+import com.kiran.spring_security_by_toptal.beans.SignUpResponse;
+import com.kiran.spring_security_by_toptal.beans.Tokens;
+import com.kiran.spring_security_by_toptal.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")

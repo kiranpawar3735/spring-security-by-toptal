@@ -1,10 +1,16 @@
 package com.kiran.spring_security_by_toptal.beans;
 
-import com.kiran.spring_security_by_toptal.entity.User;
-import lombok.*;
+import java.util.stream.Collectors;
+
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.stream.Collectors;
+import com.kiran.spring_security_by_toptal.entity.User;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor

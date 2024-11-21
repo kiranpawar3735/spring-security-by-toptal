@@ -1,11 +1,12 @@
 package com.kiran.spring_security_by_toptal.service;
 
-import com.kiran.spring_security_by_toptal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.kiran.spring_security_by_toptal.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

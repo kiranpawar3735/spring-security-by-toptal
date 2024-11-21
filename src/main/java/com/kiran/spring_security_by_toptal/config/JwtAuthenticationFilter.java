@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,12 +17,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.ExpiredJwtException;
+
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
-	
+
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -29,91 +32,56 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws IOException, ServletException {
 
-		
-
 		String token = null;
 		String username = null;
 
-		String authorization = request.getHeader("Authorization");
+		String authorizationHeader = request.getHeader("Authorization");
 
-		if (authorization != null && authorization.startsWith("Bearer ")) {
-			token = authorization.substring("Bearer ".length());
-			username = jwtTokenUtil.getUsername(token);
-		}
-
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-			if (jwtTokenUtil.validate(token)) {
-				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-						userDetails, null, userDetails.getAuthorities());
-
-				usernamePasswordAuthenticationToken
-						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+		try {
+			if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+				token = authorizationHeader.substring("Bearer ".length());
+				username = jwtTokenUtil.getUsername(token);
 			}
-		}
-		filterChain.doFilter(request, response);
+			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-//        String authorization = request.getHeader("Authorization");
-////
-//        if (authorization == null) {
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.getWriter().write("Authorization header is missing");
-//            return;
-//        }
-//
-//        if (authorization.startsWith("Bearer ")) {
-////            // Handle JWT Authentication
-//            String token = authorizationHeader.substring(7);
-//            if (jwtTokenProvider.validate(token)) {
-//                String username = jwtTokenProvider.getUsername(token);
-//                SecurityContextHolder.getContext().setAuthentication(
-//                        new UsernamePasswordAuthenticationToken(username, null, null)
-//                );
-//            } else {
-//                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                response.getWriter().write("Invalid JWT token");
-//                return;
-//            }
-//        } else if (authorizationHeader.startsWith("Basic ")) {
-//            // Handle Basic Authentication for login
-//            String credentials = authorizationHeader.substring(6);
-//            String decodedCredentials = new String(Base64.getDecoder().decode(credentials));
-//            String[] parts = decodedCredentials.split(":", 2);
-//
-//            if (parts.length != 2) {
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//                response.getWriter().write("Invalid Basic Authentication header");
-//                return;
-//            }
-//
-//            String username = parts[0];
-//            String password = parts[1];
-//
-//            try {
-//                Authentication authentication = authenticationManager.authenticate(
-//                        new UsernamePasswordAuthenticationToken(username, password)
-//                );
-//
-//                // Generate JWT after successful authentication
-//                String token = jwtTokenProvider.generateToken(authentication);
-//                response.setStatus(HttpServletResponse.SC_OK);
-//                response.getWriter().write("Bearer " + token);
-//                return;
-//            } catch (Exception e) {
-//                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                response.getWriter().write("Invalid username or password");
-//                return;
-//            }
-//        } else {
-//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            response.getWriter().write("Unsupported Authorization type");
-//            return;
-//        }
-//
-//        filterChain.doFilter(request, response);
+				if (jwtTokenUtil.validate(token)) {
+					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+							userDetails, null, userDetails.getAuthorities());
+
+					usernamePasswordAuthenticationToken
+							.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				}
+			}
+//			else if (authorizationHeader != null && authorizationHeader.startsWith("Basic ")) {
+//				// Extract username and password from the Basic Authentication header
+//		        String authHeader = authorizationHeader.replace("Basic ", "");
+//		        String decoded = new String(Base64.getDecoder().decode(authHeader), StandardCharsets.UTF_8);
+//		        String[] credentials = decoded.split(":", 2);
+//		        
+//		        username = credentials[0];
+//		        String password = credentials[1];
+//		        
+//		        // Perform the authentication
+//		        Authentication authentication = authenticationManager.authenticate(
+//		            new UsernamePasswordAuthenticationToken(username, password)
+//		        );
+//		        
+//		        // Set authentication in the security context
+//				SecurityContextHolder.getContext().setAuthentication(authentication);
+//			}
+			filterChain.doFilter(request, response);
+		} catch (
+
+		ExpiredJwtException e) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+		} catch (AuthenticationException e) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+		}
 //
 //        String requestUri = request.getRequestURI();
 //        String token = getTokenFromRequest(request);

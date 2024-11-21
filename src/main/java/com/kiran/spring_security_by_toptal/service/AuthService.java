@@ -1,9 +1,15 @@
 package com.kiran.spring_security_by_toptal.service;
 
-import com.kiran.spring_security_by_toptal.beans.*;
-import com.kiran.spring_security_by_toptal.entity.User;
-
 import java.util.Optional;
+
+import com.kiran.spring_security_by_toptal.beans.EmailVerification;
+import com.kiran.spring_security_by_toptal.beans.LoginRequest;
+import com.kiran.spring_security_by_toptal.beans.LoginResponse;
+import com.kiran.spring_security_by_toptal.beans.PasswordResetRequest;
+import com.kiran.spring_security_by_toptal.beans.PasswordResetResponse;
+import com.kiran.spring_security_by_toptal.beans.SignUpRequest;
+import com.kiran.spring_security_by_toptal.beans.SignUpResponse;
+import com.kiran.spring_security_by_toptal.beans.Tokens;
 
 public interface AuthService {
 

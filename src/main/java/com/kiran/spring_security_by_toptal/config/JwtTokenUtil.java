@@ -57,6 +57,10 @@ public class JwtTokenUtil {
 			return false;
 		}
 	}
+	
+	public String generateRefreshToken(Authentication authentication) {
+		return generateRefreshToken((User) authentication.getPrincipal());
+	}
 
 	public String generateRefreshToken(User user) {
 		Map<String, Object> claims = new HashMap<>();
@@ -120,13 +124,8 @@ public class JwtTokenUtil {
 	}
 
 	private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-		try {
-			final Claims claims = extractAllClaims(token);
-			return claimsResolver.apply(claims);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		final Claims claims = extractAllClaims(token);
+		return claimsResolver.apply(claims);
 	}
 
 	private Claims extractAllClaims(String token) {
