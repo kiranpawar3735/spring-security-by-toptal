@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors(withDefaults()).csrf(csrf -> csrf.disable())
 				.authorizeRequests(
-						requests -> requests.antMatchers("/hello/user", "/auth/login", "/auth/sign-up", "/error")
+						requests -> requests.antMatchers("/hello/user", "/auth/login", "/auth/sign-up", "/error", "/swagger**/**/**", "/v**/api-docs/**")
 								.permitAll().anyRequest().authenticated())
 				.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.exceptionHandling(handling -> handling.authenticationEntryPoint((request, response, authException) -> {
